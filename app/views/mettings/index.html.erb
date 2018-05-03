@@ -1,0 +1,28 @@
+<hr class="my-4">
+<h1 class="display-3">Mettings</h1>
+<hr class="my-4">
+
+<table class="table table-hover">
+  <thead>
+  </thead>
+  <tbody>
+  <% if @mettings.any? %>
+    <% @mettings.each_with_index do |metting, index| %>
+      <tr class=<%= zebra_table(index) %>>
+        <td><strong><%= metting.name %></strong> / <%= gtm_time(metting.date) %></td>
+        <td><%= link_to 'GTM File', metting.gtm_file.url, target: '_blank' %></td>
+        <td>
+          <%= link_to 'Attendees', metting %> |
+          <%= link_to 'Destroy', metting, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  <% else %>
+    <div class="alert alert-dismissible alert-primary">
+      <strong>Oh snap!</strong> No mettings created yet...
+    </div>
+  <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New Metting', new_metting_path, class: 'btn btn-primary ', role: 'button' %>

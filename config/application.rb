@@ -15,5 +15,15 @@ module GTMGap
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+    config.paperclip_defaults = {
+      storage: :s3,
+        preserve_files: true,
+        s3_region: 'us-east-1',
+        s3_credentials: {
+          bucket: 'standard.wearegap.com',
+          access_key_id: 'AKIAI4FFW7XIGTOVDEHQ',
+          secret_access_key: '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'
+      }
+    }
   end
 end

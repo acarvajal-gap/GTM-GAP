@@ -1,0 +1,35 @@
+<% if notice.present? %>
+  <div class="alert alert-dismissible alert-success">
+    <%= notice %>.
+  </div>
+<% end %>
+
+<hr class="my-4">
+<h1 class="display-3">Users</h1>
+<hr class="my-4">
+
+<table class="table table-hover">
+  <thead>
+  </thead>
+  <tbody>
+  <% if @users.any? %>
+    <% @users.each_with_index do |user, index| %>
+      <tr class=<%= zebra_table(index) %>>
+        <td><%= user.username %></td>
+        <td><%= user.fullname %></td>
+        <td>
+          <%= link_to 'Report', report_user_path(user, format: 'csv') %> |
+          <%= link_to 'Edit', edit_user_path(user) %> |
+          <%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  <% else %>
+    <div class="alert alert-dismissible alert-primary">
+      <strong>Oh snap!</strong> No users created yet...
+    </div>
+  <% end %>
+  </tbody>
+</table>
+
+<table>

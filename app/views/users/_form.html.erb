@@ -1,0 +1,22 @@
+<%= form_with(model: user, local: true) do |form| %>
+  <% if user.errors.any? %>
+    <div class="alert alert-dismissible alert-danger">
+      <% user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </div>
+  <% end %>
+
+  <fieldset>
+    <div class="form-group">
+      <label class="col-form-label" for="inputDefault">Username</label>
+      <%= form.text_field :username, class: 'form-control w-25', placeholder: 'Username' %>
+      <label class="col-form-label" for="inputDefault">Fullname</label>
+      <%= form.text_field :fullname, class: 'form-control w-25', placeholder: 'Fullname' %>
+    </div>
+    <p>
+      <%= form.submit 'submit', class: 'btn btn-primary' %>
+      <%= link_to 'Back', users_path, class: 'btn btn-default ', role: 'button' %>
+    </p>
+  </fieldset>
+<% end %>

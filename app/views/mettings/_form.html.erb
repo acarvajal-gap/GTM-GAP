@@ -1,0 +1,20 @@
+<%= form_with(model: metting, local: true, multipart: true) do |form| %>
+  <% if metting.errors.any? %>
+    <div class="alert alert-dismissible alert-danger">
+      <% metting.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </div>
+  <% end %>
+
+  <fieldset>
+    <div class="form-group">
+      <%= form.file_field :gtm_file, :class => 'form-control-file', 'aria-describedby' => 'fileHelp' %>
+      <small id="fileHelp" class="form-text text-muted">Please select xls GTM file.</small>
+    </div>
+    <p>
+      <%= form.submit 'submit', class: 'btn btn-primary' %>
+      <%= link_to 'Back', mettings_path, class: 'btn btn-default ', role: 'button' %>
+    </p>
+  </fieldset>
+<% end %>
