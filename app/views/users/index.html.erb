@@ -4,9 +4,7 @@
   </div>
 <% end %>
 
-<hr class="my-4">
-<h1 class="display-3">Users</h1>
-<hr class="my-4">
+<%= page_header([{name: :h1, title: 'Users', class: 'display-3'}]) %>
 
 <table class="table table-hover">
   <thead>
@@ -18,7 +16,7 @@
         <td><%= user.username %></td>
         <td><%= user.fullname %></td>
         <td>
-          <%= link_to 'Report', report_user_path(user, format: 'csv') %> |
+          <%= link_to 'Report', master_report_user_path(id: user, format: 'csv') %> |
           <%= link_to 'Edit', edit_user_path(user) %> |
           <%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
@@ -31,5 +29,3 @@
   <% end %>
   </tbody>
 </table>
-
-<table>

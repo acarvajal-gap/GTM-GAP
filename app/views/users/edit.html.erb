@@ -1,5 +1,4 @@
-<hr class="my-4">
-<h1 class="display-3">Editing <%= @user.username.titleize %></h1>
-<hr class="my-4">
+<%= page_header([{name: :h1, title: "Editing #{@user.username.titleize}", class: 'display-3'}]) %>
+
 
 <%= render 'form', user: @user %>

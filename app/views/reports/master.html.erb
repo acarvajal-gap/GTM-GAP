@@ -1,0 +1,23 @@
+<%= page_header([{name: :h1, title: "Master Report", class: 'display-3'}]) %>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Mettings</th>
+      <th scope="col">Mettings Attended</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @report.attendees.each_with_index do |attendee, index| %>
+      <tr class=<%= zebra_table(index) %>>
+        <td><%= attendee[:username] %></td>
+        <td><%= attendee[:metting_list] %></td>
+        <td><%= attendee[:metting_count] %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Export', master_reports_path(format: 'csv'), class: 'btn btn-primary', role: 'button' %>
+<%= link_to 'Back', reports_path, class: 'btn btn-default', role: 'button' %>

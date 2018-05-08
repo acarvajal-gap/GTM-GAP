@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :report]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :master_report]
 
   # GET /users
   # GET /users.json
@@ -64,11 +64,11 @@ class UsersController < ApplicationController
     end
   end
 
-  def report
-    csv_report = MettingExport.new(@user).do
+  def master_report
+    report = Reports::Master.new(@user)
 
     respond_to do |format|
-      format.csv { send_data csv_report, filename: "#{@user.username.parameterize(separator: "_")}.csv" }
+      format.csv { send_data report.to_csv, filename: "#{@user.username.parameterize(separator: "_")}.csv" }
     end
   end
 

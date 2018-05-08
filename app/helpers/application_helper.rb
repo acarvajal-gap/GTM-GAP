@@ -16,4 +16,15 @@ module ApplicationHelper
     content_tag :span, '(current)', class: 'sr-only'
   end
 
+  def page_header(elements)
+    border = content_tag :hr, '', class: 'my-4'
+    capture do
+      concat border
+      elements.each do |e|
+        concat content_tag e[:name], e[:title], class: e[:class]
+      end
+      concat border
+    end
+  end
+
 end

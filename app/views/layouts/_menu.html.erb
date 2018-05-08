@@ -16,6 +16,11 @@
             Users <%= active_menu('users') %>
           <% end %>
         </li>
+        <li class="nav-item <%= li_active('reports') %>">
+          <%= link_to reports_path, class: 'nav-link' do %>
+            Reports <%= active_menu('reports') %>
+          <% end %>
+        </li>
       </ul>
     </div>
   </div>
