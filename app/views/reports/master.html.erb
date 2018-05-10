@@ -4,16 +4,20 @@
   <thead>
     <tr>
       <th scope="col">Username</th>
-      <th scope="col">Mettings</th>
-      <th scope="col">Mettings Attended</th>
+      <% @report.mettings.each do |m| %>
+        <th scope="col" class='text-center'><%= m.name %></th>
+      <% end %>
+      <th scope="col" class='text-center'>Mettings Attended</th>
     </tr>
   </thead>
   <tbody>
     <% @report.attendees.each_with_index do |attendee, index| %>
       <tr class=<%= zebra_table(index) %>>
         <td><%= attendee[:username] %></td>
-        <td><%= attendee[:metting_list] %></td>
-        <td><%= attendee[:metting_count] %></td>
+        <% attendee[:metting_list].split(',').each do |a| %>
+          <th scope="col" class='text-center' scope="col"><span><%= a.to_i.zero? ? '' : 'X' %></span></th>
+        <% end %>
+        <td class='text-center'><%= attendee[:metting_count] %></td>
       </tr>
   <% end %>
   </tbody>

@@ -5,8 +5,8 @@ class Reports::Master
   attr_reader :metting, :mettings, :attendees
 
   def initialize(user_id=nil)
-    @metting = User.all_mettings(user_id)
     @mettings = Metting.all.order('id ASC')
+    @metting = User.all_mettings(user_id)
     @attendees = load_attendees
   end
 
@@ -15,31 +15,20 @@ class Reports::Master
     metting.each do |mtg|
       values <<
         {
-          username: mtg.username.titleize,
-          metting_list: mettings_list(mtg.mettings_ids.split(',')),
+          username: mtg.username,
+          metting_list: mtg.mettings_ids,
           metting_count: mtg.metting_count
         }
     end
     values
   end
 
-  def mettings_list(ids)
-    mettings_list = []
-    mettings.each do |mtg|
-      if ids.include?(mtg.id.to_s)
-        mettings_list << ["#{mtg.name} #{gtm_time(mtg.date, nil, '%a %b %d %I:%M %p')}"]
-        ids.delete(mtg.id.to_s)
-      else
-        mettings_list << ''
-      end
-    end
-    mettings_list.join(',')
-  end
-
   def to_csv
     CSV.generate(headers: true) do |csv|
+      csv << ['Username', @mettings.map{|m|m.name}, 'Mettings Attended'].flatten
+
       attendees.each do |row|
-        csv << [row[:username], row[:metting_list], row[:metting_count]]
+        csv << [row[:username], row[:metting_list].split(','), row[:metting_count]].flatten
       end
     end
   end

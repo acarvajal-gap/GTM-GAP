@@ -7,18 +7,22 @@ class User < ApplicationRecord
 
   def self.all_mettings(user_id=nil)
     sql = "SELECT
-        users.username AS username,
-        GROUP_CONCAT(concat(mettings.id), '') AS mettings_ids,
-        count(*) AS metting_count
+        cj_u.username AS username,
+        GROUP_CONCAT(CASE
+          WHEN mu.metting_id IS NOT NULL THEN 1
+          ELSE 0
+        END
+        ORDER BY mu.metting_id) AS mettings_ids,
+        COUNT(mu.metting_id) AS metting_count
       FROM
-        mettings
-      LEFT JOIN
-        metting_users ON mettings.id = metting_users.metting_id
-      LEFT JOIN
-        users ON metting_users.user_id = users.id"
-    sql << " WHERE users.id = ?" if user_id.present?
+        users AS cj_u
+          CROSS JOIN
+        mettings AS cj_mt
+          LEFT JOIN
+        metting_users AS mu ON cj_u.id = mu.user_id AND cj_mt.id = mu.metting_id"
+    sql << " WHERE cj_u.id = ?" if user_id.present?
     sql << " GROUP BY username"
-    sql << " ORDER BY mettings.id"
+    sql << " ORDER BY username"
     find_by_sql([sql, user_id])
   end
 
