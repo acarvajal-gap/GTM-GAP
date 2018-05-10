@@ -1,15 +1,17 @@
 <%= page_header([{name: :h1, title: "Reports", class: 'display-3'}]) %>
 
-<table class="table table-hover">
-  <thead>
-  </thead>
-  <tbody>
-      <tr class='table-primary'>
-        <td>Master Report</td>
-        <td>
-          <%= link_to 'View', master_reports_path() %> |
-          <%= link_to 'Export',  master_reports_path(format: 'csv') %>
-        </td>
-      </tr>
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table table-hover responsive">
+    <thead>
+    </thead>
+    <tbody>
+        <tr class='table-primary'>
+          <td>Master Report</td>
+          <td>
+            <%= link_to 'View', master_reports_path() %> |
+            <%= link_to 'Export',  master_reports_path(format: 'csv') %>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+</div>

@@ -16,6 +16,7 @@ class Reports::Master
       values <<
         {
           username: mtg.username,
+          fullname: mtg.fullname,
           metting_list: mtg.mettings_ids,
           metting_count: mtg.metting_count
         }
@@ -25,10 +26,10 @@ class Reports::Master
 
   def to_csv
     CSV.generate(headers: true) do |csv|
-      csv << ['Username', @mettings.map{|m|m.name}, 'Mettings Attended'].flatten
+      csv << ['Username', 'Fullname', @mettings.map{|m| "#{m.name} #{m.date.strftime('%Y-%m-%d')}"}, 'Mettings Attended'].flatten
 
       attendees.each do |row|
-        csv << [row[:username], row[:metting_list].split(','), row[:metting_count]].flatten
+        csv << [row[:username], row[:fullname], row[:metting_list].split(','), row[:metting_count]].flatten
       end
     end
   end

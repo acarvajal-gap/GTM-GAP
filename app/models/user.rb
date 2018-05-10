@@ -8,6 +8,7 @@ class User < ApplicationRecord
   def self.all_mettings(user_id=nil)
     sql = "SELECT
         cj_u.username AS username,
+        cj_u.fullname AS fullname,
         GROUP_CONCAT(CASE
           WHEN mu.metting_id IS NOT NULL THEN 1
           ELSE 0

@@ -6,27 +6,29 @@
 
 <%= page_header([{name: :h1, title: @metting.name.titleize, class: 'display-3'}, {name: :h6, title: gtm_time(@metting.date), class: ''}]) %>
 
-<table class="table table-hover">
-  <thead>
-  </thead>
-  <tbody>
-  <% if @users.any? %>
-    <% @users.each_with_index do |user, index| %>
-      <tr class=<%= zebra_table(index) %>>
-        <td><%= user.username %></td>
-        <td><%= user.fullname %></td>
-        <td>
-          <%= link_to 'Report', master_report_user_path(id: user, format: 'csv') %> |
-          <%= link_to 'Edit', edit_user_path(user) %>
-        </td>
-      </tr>
+<div class="table-responsive">
+  <table class="table table-hover responsive">
+    <thead>
+    </thead>
+    <tbody>
+    <% if @users.any? %>
+      <% @users.each_with_index do |user, index| %>
+        <tr class=<%= zebra_table(index) %>>
+          <td><%= user.username %></td>
+          <td><%= user.fullname %></td>
+          <td>
+            <%= link_to 'Report', master_report_user_path(id: user, format: 'csv') %> |
+            <%= link_to 'Edit', edit_user_path(user) %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <div class="alert alert-dismissible alert-primary">
+        <strong>Oh snap!</strong> No users created yet...
+      </div>
     <% end %>
-  <% else %>
-    <div class="alert alert-dismissible alert-primary">
-      <strong>Oh snap!</strong> No users created yet...
-    </div>
-  <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
 
 <%= link_to 'Back', mettings_path, class: 'btn btn-default ', role: 'button' %>
