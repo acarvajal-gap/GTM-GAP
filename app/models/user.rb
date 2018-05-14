@@ -9,11 +9,7 @@ class User < ApplicationRecord
     sql = "SELECT
         cj_u.username AS username,
         cj_u.fullname AS fullname,
-        GROUP_CONCAT(CASE
-          WHEN mu.metting_id IS NOT NULL THEN 1
-          ELSE 0
-        END
-        ORDER BY mu.metting_id) AS mettings_ids,
+        GROUP_CONCAT(mu.metting_id ORDER BY mu.metting_id) AS mettings_ids,
         COUNT(mu.metting_id) AS metting_count
       FROM
         users AS cj_u
@@ -25,6 +21,10 @@ class User < ApplicationRecord
     sql << " GROUP BY username"
     sql << " ORDER BY username"
     find_by_sql([sql, user_id])
+  end
+
+  def merge!(other)
+    super(other, attributes: self.attributes.keys, associations: %w[metting_users]) unless self.id == other.id
   end
 
 end

@@ -17,11 +17,30 @@ class Reports::Master
         {
           username: mtg.username,
           fullname: mtg.fullname,
-          metting_list: mtg.mettings_ids,
+          metting_list: mettings_list(mtg.mettings_ids),
           metting_count: mtg.metting_count
         }
     end
     values
+  end
+
+  def mettings_list(ids)
+    if ids.present?
+      ids = ids.split(',')
+      mettings_list = []
+      mettings.each do |mtg|
+        if ids.include?(mtg.id.to_s)
+          mettings_list << 1
+          ids.delete(mtg.id.to_s)
+        else
+          mettings_list << 0
+        end
+      end
+    else
+      mettings_list = [].fill(0, 0...mettings.count)
+    end
+
+    mettings_list.join(',')
   end
 
   def to_csv

@@ -4,6 +4,12 @@
   </div>
 <% end %>
 
+<% content_for :javascript do %>
+  $(document).on('turbolinks:load', function(){
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+<% end %>
+
 <%= page_header([{name: :h1, title: 'Users', class: 'display-3'}]) %>
 
 <div class="table-responsive">
@@ -16,9 +22,13 @@
         <tr class=<%= zebra_table(index) %>>
           <td><%= user.username %></td>
           <td><%= user.fullname %></td>
+          <td><%= user.email %></td>
+          <td><%= user.recent? ? content_tag(:i, nil, class: 'fas fa-exclamation', 'data-toggle' => :tooltip,
+                  'data-placement' => :top, 'title' => '', 'data-original-title' => :Recent) : '' %></td>
           <td>
             <%= link_to 'Report', master_report_user_path(id: user, format: 'csv') %> |
             <%= link_to 'Edit', edit_user_path(user) %> |
+            <%= link_to 'Merge', merge_user_path(user) %> |
             <%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %>
           </td>
         </tr>

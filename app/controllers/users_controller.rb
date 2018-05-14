@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :master_report]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :master_report, :merge, :merge_execute]
 
   # GET /users
   # GET /users.json
@@ -72,6 +72,33 @@ class UsersController < ApplicationController
     end
   end
 
+  def merge
+  end
+
+  def search
+    users = []
+    users = User.where("username LIKE ? AND id NOT IN(?)", "#{params[:query]}%", params[:id]) if params[:query].present?
+
+    respond_to do |format|
+      format.json { render json: users, status: :ok }
+    end
+  end
+
+  def merge_execute
+    if params[:user_ids].present? && params[:user_ids].any?
+      User.where(id: params[:user_ids]).each do |user|
+        @user.merge!(user)
+      end
+      status = :ok
+    else
+      status = :not_acceptable
+    end
+
+    respond_to do |format|
+      format.js { render json: @user.id, status: status }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -80,6 +107,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username, :fullname)
+      params.require(:user).permit(:username, :fullname, :email)
     end
 end

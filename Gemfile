@@ -40,6 +40,8 @@ gem 'aws-sdk', '< 3.0'
 gem 'paperclip'
 gem 'spreadsheet'
 gem 'rails_12factor'
+gem 'ar_merge'
+gem 'js-routes'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

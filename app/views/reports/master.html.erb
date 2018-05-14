@@ -1,5 +1,11 @@
 <%= page_header([{name: :h1, title: "Master Report", class: 'display-3'}]) %>
 
+<% content_for :javascript do %>
+  $(document).on('turbolinks:load', function()
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+<% end %>
+
 <div class="table-responsive">
   <table class="table table-hover responsive">
     <thead>
@@ -18,7 +24,9 @@
           <td><%= attendee[:username] %></td>
           <td class='text-center'><%= attendee[:fullname] %></td>
           <% attendee[:metting_list].split(',').each do |a| %>
-            <th scope="col" class='text-center' scope="col"><span><%= a.to_i.zero? ? '' : 'X' %></span></th>
+            <th scope="col" class='text-center' scope="col"><span><%= a.to_i.zero? ? '' : content_tag(:i, nil,
+              class: 'far fa-calendar-check', 'data-toggle' => :tooltip,
+              'data-placement' => :top, 'title' => '', 'data-original-title' => :Attended) %></span></th>
           <% end %>
           <td class='text-center'><%= attendee[:metting_count] %></td>
         </tr>
