@@ -65,7 +65,7 @@ class UsersController < ApplicationController
   end
 
   def master_report
-    report = Reports::Master.new(@user)
+    report = Reports::Single.new(params.merge(user_id: @user.id))
 
     respond_to do |format|
       format.csv { send_data report.to_csv, filename: "#{@user.username.parameterize(separator: "_")}.csv" }
@@ -76,11 +76,12 @@ class UsersController < ApplicationController
   end
 
   def search
-    users = []
-    users = User.where("username LIKE ? AND id NOT IN(?)", "#{params[:query]}%", params[:id]) if params[:query].present?
+    @user = User.find_by_id(params[:id])
+    @users = []
+    @users = User.where("username LIKE ? AND id NOT IN(?)", "#{params[:query]}%", @user.id) if params[:query].present?
 
     respond_to do |format|
-      format.json { render json: users, status: :ok }
+      format.js
     end
   end
 
@@ -89,13 +90,10 @@ class UsersController < ApplicationController
       User.where(id: params[:user_ids]).each do |user|
         @user.merge!(user)
       end
-      status = :ok
-    else
-      status = :not_acceptable
     end
 
     respond_to do |format|
-      format.js { render json: @user.id, status: status }
+      format.js
     end
   end
 

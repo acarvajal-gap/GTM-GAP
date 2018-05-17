@@ -4,12 +4,6 @@
   </div>
 <% end %>
 
-<% content_for :javascript do %>
-  $(document).on('turbolinks:load', function(){
-    $('[data-toggle="tooltip"]').tooltip();
-  });
-<% end %>
-
 <%= page_header([{name: :h1, title: 'Users', class: 'display-3'}]) %>
 
 <div class="table-responsive">

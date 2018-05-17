@@ -1,0 +1,28 @@
+<table class="table table-hover responsive">
+  <thead>
+  <tr>
+    <th scope="col">Username</th>
+    <th scope="col" class='text-center'>Fullname</th>
+    <% report.mettings.each do |m| %>
+      <th scope="col" class='text-center'><%= "#{m.name} #{m.date.strftime('%Y-%m-%d')}" %></th>
+    <% end %>
+    <th scope="col" class='text-center'>Mettings Attended</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% report.attendees.each_with_index do |attendee, index| %>
+    <tr class=<%= zebra_table(index) %>>
+      <td><%= attendee[:username] %></td>
+      <td class='text-center'><%= attendee[:fullname] %></td>
+      <% attendee[:metting_list].split(',').each do |a| %>
+        <th scope="col" class='text-center' scope="col">
+          <span><%= a.to_i.zero? ? '' : content_tag(:i, nil, class: 'far fa-calendar-check', 'data-toggle' => :tooltip,
+          'data-placement' => :top, 'title' => '', 'data-original-title' => :Attended) %>
+          </span>
+        </th>
+      <% end %>
+      <td class='text-center'><%= attendee[:metting_count] %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

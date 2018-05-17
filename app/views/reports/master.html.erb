@@ -1,39 +1,31 @@
 <%= page_header([{name: :h1, title: "Master Report", class: 'display-3'}]) %>
 
-<% content_for :javascript do %>
-  $(document).on('turbolinks:load', function()
-    $('[data-toggle="tooltip"]').tooltip();
-  });
-<% end %>
-
-<div class="table-responsive">
-  <table class="table table-hover responsive">
-    <thead>
-      <tr>
-        <th scope="col">Username</th>
-        <th scope="col" class='text-center'>Fullname</th>
-        <% @report.mettings.each do |m| %>
-          <th scope="col" class='text-center'><%= "#{m.name} #{m.date.strftime('%Y-%m-%d')}" %></th>
-        <% end %>
-        <th scope="col" class='text-center'>Mettings Attended</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @report.attendees.each_with_index do |attendee, index| %>
-        <tr class=<%= zebra_table(index) %>>
-          <td><%= attendee[:username] %></td>
-          <td class='text-center'><%= attendee[:fullname] %></td>
-          <% attendee[:metting_list].split(',').each do |a| %>
-            <th scope="col" class='text-center' scope="col"><span><%= a.to_i.zero? ? '' : content_tag(:i, nil,
-              class: 'far fa-calendar-check', 'data-toggle' => :tooltip,
-              'data-placement' => :top, 'title' => '', 'data-original-title' => :Attended) %></span></th>
-          <% end %>
-          <td class='text-center'><%= attendee[:metting_count] %></td>
-        </tr>
+<div class="form-group">
+  <select id="multiple-mettings" multiple="multiple">
+    <% @report.all_mettings.reverse.each_with_index do |metting, index| %>
+      <option value="<%= metting.id %>" <%= index.zero? ? "selected='true'" : '' %>><%= "#{metting.name} #{metting.date.strftime('%Y-%m-%d')}" %></option>
     <% end %>
-    </tbody>
-  </table>
+  </select>
 </div>
 
-<%= link_to 'Export', master_reports_path(format: 'csv'), class: 'btn btn-primary', role: 'button' %>
+<div class="form-group">
+  <select id="single-filter">
+    <option value="1">Username ASC</option>
+    <option value="2">Username DESC</option>
+    <option value="3">Fullname ASC</option>
+    <option value="4">Fullname DESC</option>
+    <option value="5">Mettings Attended: High to Low</option>
+    <option value="6">Mettings Attended: Low to high</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <%= link_to 'Search', "#", id: 'master-search', class: 'btn btn-primary', role: 'button' %>
+</div>
+
+<div class="table-responsive" id="master-all">
+  <%= render partial: 'reports/tables/master', locals: {report: @report } %>
+</div>
+
+<%= link_to 'Export', '#', id: 'master-export', class: 'btn btn-primary', role: 'button' %>
 <%= link_to 'Back', reports_path, class: 'btn btn-default', role: 'button' %>

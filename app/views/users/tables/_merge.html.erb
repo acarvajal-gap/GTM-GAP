@@ -1,0 +1,28 @@
+<table class="table table-hover responsive users-table">
+  <thead>
+    <tr>
+      <th scope="col" class='text-center'>Username</th>
+      <th scope="col" class='text-center'>Fullname</th>
+      <th scope="col" class='text-center'>Email</th>
+      <th scope="col" class='text-center'>Merge with <%= user.username.titleize %>?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class='results text-center'>
+      <% if @users.empty? %>
+        <tr class='results text-center'>
+          <td colspan='4'><strong>Oh snap!</strong> No results, please search again!</td>
+        </tr>
+      <% else %>
+        <% @users.each do |u| %>
+          <tr class='table-light'>
+            <td class='text-center'><%= u.username %></td>
+            <td class='text-center'><%= u.fullname %></td>
+            <td class='text-center'><%= u.email %></td>
+            <td class='text-center'><input id='checkBox' type='checkbox' value='<%= u.id %>'></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tr>
+  </tbody>
+</table>

@@ -4,28 +4,30 @@ class ReportsController < ApplicationController
   # GET /reports
   # GET /reports.json
   def index
+    redirect_to master_reports_url
   end
 
   # GET /reports/1
   # GET /reports/1.json
   def show
+    redirect_to master_reports_url
   end
 
   # GET /reports/new
   def new
-    redirect_to reports_url
+    redirect_to master_reports_url
     @report = Report.new
   end
 
   # GET /reports/1/edit
   def edit
-    redirect_to reports_url
+    redirect_to master_reports_url
   end
 
   # POST /reports
   # POST /reports.json
   def create
-    redirect_to reports_url
+    redirect_to master_reports_url
     @report = Report.new(report_params)
 
     respond_to do |format|
@@ -42,7 +44,7 @@ class ReportsController < ApplicationController
   # PATCH/PUT /reports/1
   # PATCH/PUT /reports/1.json
   def update
-    redirect_to reports_url
+    redirect_to master_reports_url
     respond_to do |format|
       if @report.update(report_params)
         format.html { redirect_to @report, notice: 'Report was successfully updated.' }
@@ -60,16 +62,17 @@ class ReportsController < ApplicationController
     redirect_to reports_url
     @report.destroy
     respond_to do |format|
-      format.html { redirect_to reports_url, notice: 'Report was successfully destroyed.' }
+      format.html { redirect_to master_reports_url, notice: 'Report was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   def master
-    @report = Reports::Master.new
+    @report = Reports::All.new(params)
 
     respond_to do |format|
       format.csv { send_data @report.to_csv, filename: 'master.csv'}
+      format.js
       format.html
     end
   end

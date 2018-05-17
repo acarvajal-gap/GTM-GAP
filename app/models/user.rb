@@ -5,7 +5,7 @@ class User < ApplicationRecord
   validates_presence_of :username
   validates_uniqueness_of :username
 
-  def self.all_mettings(user_id=nil)
+  def self.all_mettings(sql_where, sql_order, *bind_vars)
     sql = "SELECT
         cj_u.username AS username,
         cj_u.fullname AS fullname,
@@ -17,10 +17,10 @@ class User < ApplicationRecord
         mettings AS cj_mt
           LEFT JOIN
         metting_users AS mu ON cj_u.id = mu.user_id AND cj_mt.id = mu.metting_id"
-    sql << " WHERE cj_u.id = ?" if user_id.present?
+    sql << sql_where
     sql << " GROUP BY username"
-    sql << " ORDER BY username"
-    find_by_sql([sql, user_id])
+    sql << sql_order
+    find_by_sql([sql, *bind_vars])
   end
 
   def merge!(other)

@@ -1,84 +1,5 @@
 <%= page_header([{name: :h1, title: "Merging #{@user.username.titleize}", class: 'display-3'}]) %>
 
-<% content_for :javascript do %>
-
-  function search_by_username(){
-    $('.merge_error').remove();
-
-    $.ajax({
-      url: Routes.search_users_path(),
-      data: {query: $('#query').val(), id: <%= params[:id] %>},
-      success: function(json){
-        if (json.length == 0){
-          $('.users-table').find('tbody tr').remove();
-          var row = "<tr class='results text-center'><td colspan='4'>" +
-            "<strong>Oh snap!</strong> No results, please search again!</td></tr>"
-          $('.users-table tbody').append(row);
-        } else {
-          $('.users-table').find('tbody tr').remove();
-          $.each(json, function(index, value) {
-            var row = "<tr class='table-light'>" +
-              "<td class='text-center'>"+check_null(value.username)+"</td>" +
-              "<td class='text-center'>"+check_null(value.fullname)+"</td>" +
-              "<td class='text-center'>"+check_null(value.email)+"</td>" +
-              "<td class='text-center'><input id='checkBox' type='checkbox' value='"+value.id+"'></td></tr>"
-            $('.users-table tbody').append(row);
-          });
-        }
-      },
-      error: function(result){
-        window.location.href = '<%= request.original_url %>';
-      }
-    });
-
-  }
-
-  function check_null(val){
-    if(val==null){
-      return '';
-    }
-    return val;
-  }
-
-  function merge(){
-    $('.merge_error').remove();
-
-    var ids = [];
-    var checkbox = $('.users-table').find('tbody').find('tr').find('input[type=checkbox]:checked');
-
-    $.each(checkbox, function(index, value) {
-      ids.push($(value).val());
-    });
-
-    $.ajax({
-      type: 'POST'  ,
-      url: Routes.merge_execute_user_path(<%= params[:id] %>),
-      data: {user_ids: ids},
-      success: function(json){
-        window.location.href = '<%= edit_user_url(params[:id]) %>';
-      },
-      error: function(json){
-        var error = "<p><div class='alert alert-dismissible alert-danger merge_error'>" +
-          "<strong>Oh snap!</strong> Please search and select a user."
-        $('.actions').append(error);
-      }
-    });
-
-  }
-
-  $(document).on('turbolinks:load', function(){
-    $('.search').click(function(event){
-      search_by_username();
-    });
-
-    $('.merge').click(function(event){
-      merge();
-    });
-
-  });
-
-<% end %>
-
 <div class="table-responsive">
   <table class="table table-hover responsive">
     <thead>
@@ -88,7 +9,6 @@
           <td class='text-center'><%= @user.username %></td>
           <td class='text-center'><%= @user.fullname %></td>
           <td class='text-center'><%= @user.email %></td>
-          <td class='text-center'>Primary user</td>
         </tr>
     </tbody>
   </table>
@@ -101,24 +21,8 @@
 
 <p>
 
-<div class="table-responsive">
-  <table class="table table-hover responsive users-table">
-    <thead>
-    <tr>
-      <th scope="col" class='text-center'>Username</th>
-      <th scope="col" class='text-center'>Fullname</th>
-      <th scope="col" class='text-center'>Email</th>
-      <th scope="col" class='text-center'>Merge with primary user?</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr class='results text-center'>
-      <td colspan="4"><strong>Oh snap!</strong> Please search first...</td>
-    </tr>
-    </tbody>
-  </table>
+<div class="table-responsive" id="merge-results">
 </div>
-
 
 <button type="button" class="btn btn-primary merge">Merge!</button>
 <%= link_to 'Back', users_path, class: 'btn btn-default', role: 'button' %>
